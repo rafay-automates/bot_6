@@ -67,35 +67,20 @@ def fetch_domains(domains: str = Query(..., description="Comma-separated domain 
     domains_list = [d.strip() for d in domains.split(",") if d.strip()]
     results = []
 
-    # for domain_name in domains_list:
-    #     # --- Normalize domain (remove "www.")
-    #     if domain_name.startswith("www."):
-    #         domain_name = domain_name[4:]
-
-    #     data = fetch_domain_data(session, csrf_token, domain_name)
-    #     if not data:
-    #         results.append({
-    #             "domain": domain_name,
-    #             "error": "Failed to fetch data"
-    #         })
-    #         continue
-
     for domain_name in domains_list:
-    # --- simple normalization (text-based)
-    domain_name = domain_name.strip().lower()
-    domain_name = domain_name.replace("https://", "").replace("http://", "")
-    if domain_name.startswith("www."):
-        domain_name = domain_name[4:]
-    domain_name = domain_name.split("/")[0]  # remove any path after the domain
+        # --- Normalize domain (remove "www.")
+        if domain_name.startswith("www."):
+            domain_name = domain_name[4:]
 
-    # --- continue as before
-    data = fetch_domain_data(session, csrf_token, domain_name)
-    if not data:
-        results.append({
-            "domain": domain_name,
-            "error": "Failed to fetch data"
-        })
-        continue
+        data = fetch_domain_data(session, csrf_token, domain_name)
+        if not data:
+            results.append({
+                "domain": domain_name,
+                "error": "Failed to fetch data"
+            })
+            continue
+
+   
 
 
         sellers_by_domain = data.get("sellers", [])
@@ -122,6 +107,7 @@ def fetch_domains(domains: str = Query(..., description="Comma-separated domain 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=False)
+
 
 
 
