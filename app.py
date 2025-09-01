@@ -91,3 +91,6 @@ def fetch_domains(domains: str = Query(..., description="Comma-separated domain 
 
     return JSONResponse(content=results)
 
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=False)
