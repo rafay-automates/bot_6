@@ -81,24 +81,14 @@ def fetch_domains(domains: str = Query(..., description="Comma-separated domain 
     #         continue
 
     for domain_name in domains_list:
-    # --- Always clean the input ---
+    # --- simple normalization (text-based)
     domain_name = domain_name.strip().lower()
-
-    # Remove protocol
-    if domain_name.startswith("https://"):
-        domain_name = domain_name.replace("https://", "")
-    if domain_name.startswith("http://"):
-        domain_name = domain_name.replace("http://", "")
-
-    # Remove leading www.
+    domain_name = domain_name.replace("https://", "").replace("http://", "")
     if domain_name.startswith("www."):
         domain_name = domain_name[4:]
+    domain_name = domain_name.split("/")[0]  # remove any path after the domain
 
-    # Remove anything after slash (paths, queries)
-    if "/" in domain_name:
-        domain_name = domain_name.split("/")[0]
-
-    # --- Now call fetch
+    # --- continue as before
     data = fetch_domain_data(session, csrf_token, domain_name)
     if not data:
         results.append({
@@ -132,6 +122,7 @@ def fetch_domains(domains: str = Query(..., description="Comma-separated domain 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=False)
+
 
 
 
