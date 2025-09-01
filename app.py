@@ -50,6 +50,12 @@ def fetch_domain_data(session, csrf_token, domain_name):
         return resp.json()
     except ValueError:
         return None
+from fastapi import FastAPI
+
+
+@app.get("/")
+def home():
+    return {"message": "✅ FastAPI backend is running on Render!"}
 
 
 # ----------------- API Endpoint -----------------
@@ -94,3 +100,4 @@ def fetch_domains(domains: str = Query(..., description="Comma-separated domain 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=False)
+
