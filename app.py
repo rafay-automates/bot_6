@@ -68,6 +68,10 @@ def fetch_domains(domains: str = Query(..., description="Comma-separated domain 
     results = []
 
     for domain_name in domains_list:
+        # --- Normalize domain (remove "www.")
+        if domain_name.startswith("www."):
+            domain_name = domain_name[4:]
+
         data = fetch_domain_data(session, csrf_token, domain_name)
         if not data:
             results.append({
@@ -100,4 +104,5 @@ def fetch_domains(domains: str = Query(..., description="Comma-separated domain 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=False)
+
 
