@@ -1,4 +1,4 @@
-streamlit
+fastapi
+uvicorn
 requests
 beautifulsoup4
-pandas
